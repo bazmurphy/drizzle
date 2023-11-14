@@ -256,53 +256,78 @@ const query = await db.select().from(users).where(eq(users.id, userId));
 
 ### Filter Functions
 
-- Where Equal
+- Where Equal `eq()`
 - `.where(eq(a, b))`
 
-- Where Not Equal
+- Where Not Equal `ne()`
 - `.where(ne(a, b))`
 
-- Where Greater Than
+- Where Greater Than `gt()`
 - `.where(gt(a, b))`
 
-- Where Greater Than or Equal
+- Where Greater Than or Equal `gte()`
 - `.where(gte(a, b))`
 
-- Where Less Than
+- Where Less Than `lt()`
 - `.where(lt(a, b))`
 
-- Where Less Than or Equal
+- Where Less Than or Equal `lte()`
 - `.where(lte(a, b))`
 
-- Where Is Null
+- Where Is Null `isNull()`
 - `.where(isNull(a))`
 
-- Where Is Not Null
+- Where Is Not Null `isNotNull()`
 - `.where(isNotNull(a))`
 
-- Where In Array - get everything that is in a List of Values
+- Where In Array `inArray()` - get everything that is in a List of Values
 - `.where(inArray(users.id, [1, 2, 3, 4]))`
 
-- Where Not In Array - get everything that is NOT in a List of Values
-- `.where(inArray(users.id, [5, 6, 7]))`
+- Where Not In Array `notInArray()`- get everything that is NOT in a List of Values
+- `.where(notInArray(users.id, [5, 6, 7]))`
 
-- Where Between - get everything that is Between Two Values
+- Where Between `between()` - get everything that is Between Two Values
 - `.where(between(users.score, 60, 90))`
 
-- Where Not Between - get everything that is NOT Between Two Values
+- Where Not Between - `notBetween()` - get everything that is NOT Between Two Values
 - `.where(notBetween(users.score, 10, 50))`
 
-- Like (String Values) (!CASE SENSITIVE) - every thing that contains "az" using standard SQL Syntax of `%az%`
+- Like `like()` - (String Values) (!CASE SENSITIVE) - every thing that contains "az" using standard SQL Syntax of `%az%`
 - other examples: Starts With: `Ba%` or Ends With: `%az`
 - `.where(like(users.fullName, "%az%))`
 
-- Like Case Insensitive (String Values) (!CASE INSENSITIVE)
+- Like Case Insensitive `iLike()` - (String Values) (!CASE INSENSITIVE)
 - `.where(iLike(users.fullName, "%AZ%"))`
 
-- Not Like (String Values) (CASE SENSITIVE) - everything that does NOT contain
+- Not Like `notLike()` - (String Values) (CASE SENSITIVE) - everything that does NOT contain
 - `.where(notLike(users.fullName, "Ba%"))`
 
-- Not Like Case Insensitive (String Values) (!CASE INSENSITIVE) - everything that does NOT contain
+- Not Like Case `notILike()` - Insensitive (String Values) (!CASE INSENSITIVE) - everything that does NOT contain
 - `.where(notILike(users.fullName, "BA%"))`
+
+- Where Not `not()` - can be used with most of the others
+- `.where(not(eq(users.id, 1)))`
+
+- And `and()` - combine two conditional operators
+- `.where(and(like(users.fullName, "%a%"), gt(users.score, 50)))`
+- find the users with a fullName that contains "a" AND a score of greater than 50
+
+- Or `or()` - either one or the other condition
+- `.where(or(like(users.fullName, "Ba%"), gt(users.score, 80)))`
+- find the users with a fullname that starts with "Ba" OR users with a score greater than 80
+
+### More Complex Query
+
+- find the user with the id of 60, AND that users name must start with "Ba" OR have a score greater than 90
+
+```ts
+const query = await db
+  .select()
+  .from(users)
+  .where(
+    and(eq(users.id), 60),
+    or(like(users.fullName, "Ba%"), gt(users.score, 90))
+  );
+```
 
 ---
