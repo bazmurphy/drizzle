@@ -1,5 +1,6 @@
 import { db } from "../database/index";
 import { users } from "../database/schema";
+import { eq } from "drizzle-orm";
 import { Request, Response } from "express";
 
 export const getAllUsers = async (req: Request, res: Response) => {
@@ -10,6 +11,20 @@ export const getAllUsers = async (req: Request, res: Response) => {
     res.json(query);
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: "server error" });
+  }
+};
+
+export const getUserById = async (req: Request, res: Response) => {
+  try {
+    const userId = Number(req.params.userId);
+    console.log("userId:", userId);
+    // notice eq() Equal To (it must be imported at the top)
+    const query = await db.select().from(users).where(eq(users.id, userId));
+    res.json(query);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "server error" });
   }
 };
 
@@ -26,5 +41,6 @@ export const addUser = async (req: Request, res: Response) => {
     res.json(query);
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: "server error" });
   }
 };

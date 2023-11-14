@@ -234,5 +234,75 @@ set the primary key of your table, we can chain on .primaryKey()
 ## Write A Query
 
 ```ts
+import { db } from "../database/index";
+import { users } from "../database/schema";
+
 const query = await db.select().from(users);
 ```
+
+---
+
+## Query Filters
+
+```ts
+import { db } from "../database/index";
+import { users } from "../database/schema";
+import { eq } from "drizzle-orm";
+
+const userId = 1;
+
+const query = await db.select().from(users).where(eq(users.id, userId));
+```
+
+### Filter Functions
+
+- Where Equal
+- `.where(eq(a, b))`
+
+- Where Not Equal
+- `.where(ne(a, b))`
+
+- Where Greater Than
+- `.where(gt(a, b))`
+
+- Where Greater Than or Equal
+- `.where(gte(a, b))`
+
+- Where Less Than
+- `.where(lt(a, b))`
+
+- Where Less Than or Equal
+- `.where(lte(a, b))`
+
+- Where Is Null
+- `.where(isNull(a))`
+
+- Where Is Not Null
+- `.where(isNotNull(a))`
+
+- Where In Array - get everything that is in a List of Values
+- `.where(inArray(users.id, [1, 2, 3, 4]))`
+
+- Where Not In Array - get everything that is NOT in a List of Values
+- `.where(inArray(users.id, [5, 6, 7]))`
+
+- Where Between - get everything that is Between Two Values
+- `.where(between(users.score, 60, 90))`
+
+- Where Not Between - get everything that is NOT Between Two Values
+- `.where(notBetween(users.score, 10, 50))`
+
+- Like (String Values) (!CASE SENSITIVE) - every thing that contains "az" using standard SQL Syntax of `%az%`
+- other examples: Starts With: `Ba%` or Ends With: `%az`
+- `.where(like(users.fullName, "%az%))`
+
+- Like Case Insensitive (String Values) (!CASE INSENSITIVE)
+- `.where(iLike(users.fullName, "%AZ%"))`
+
+- Not Like (String Values) (CASE SENSITIVE) - everything that does NOT contain
+- `.where(notLike(users.fullName, "Ba%"))`
+
+- Not Like Case Insensitive (String Values) (!CASE INSENSITIVE) - everything that does NOT contain
+- `.where(notILike(users.fullName, "BA%"))`
+
+---
