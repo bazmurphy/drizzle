@@ -7,7 +7,9 @@
   "license": "ISC",
   "description": "drizzle",
   "scripts": {
-    "server:dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "database:migration:generate": "drizzle-kit generate:pg",
     "database:migration:apply": "ts-node src/database/migrate.ts",
     "database:migration": "drizzle-kit generate:pg && ts-node src/database/migrate.ts",
